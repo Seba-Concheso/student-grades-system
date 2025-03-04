@@ -9,7 +9,7 @@ import Course from "./course.model";
 
 class Subject extends Model {}
 
-Subject.init(
+Subject.init( //Asignatura
   {
     id: {
       type: DataTypes.UUID,
@@ -25,7 +25,7 @@ Subject.init(
       unique: true,
       allowNull: false,
     },
-    courseId: { // ✅ Agregar la clave foránea aquí
+    course_id: { // ✅ Agregar la clave foránea aquí
       type: DataTypes.UUID,
       allowNull: false,
       references: {
@@ -49,11 +49,12 @@ Subject.init(
     modelName: "Subject",
     tableName: "subjects",
     timestamps: true,
+    underscored:true
   }
 );
 
 // // ✅ Definir la relación
-Course.hasMany(Subject, { foreignKey: "courseId",  as: "courses" });
-Subject.belongsTo(Course, { foreignKey: "courseId",  as: "courses" });
+Course.hasMany(Subject, { foreignKey: "course_id",  as: "courses" });
+Subject.belongsTo(Course, { foreignKey: "course_id",  as: "courses" });
 
 export default Subject;

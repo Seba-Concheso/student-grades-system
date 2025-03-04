@@ -29,6 +29,16 @@ Student.init(
           isEmail: true,
         },
       },
+      courseId: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references:{
+          model: "courses", // en referencia a la tabla courses
+          key: "id"
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL", 
+      },
       createdAt: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
@@ -43,6 +53,7 @@ Student.init(
       modelName: "Student",
       tableName: "students",
       timestamps: true,
+      underscored: true
     }
   );
 

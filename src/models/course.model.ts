@@ -34,6 +34,7 @@ Course.init(
         modelName: "Course",
         tableName: "courses",
         timestamps: true,
+        underscored: true
     }
 )
 
