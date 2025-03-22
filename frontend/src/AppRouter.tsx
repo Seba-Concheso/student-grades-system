@@ -3,9 +3,9 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home/Home";
 import About from "./Pages/About/About";
 import GradesPage from "./Pages/GradesPage/GradesPage";
-import StudentPage from "./Pages/StudentPage/StudentPage";
-import SubjectPage from "./Pages/SubjectPage/SubjectPage";
-import SettingPage from "./Pages/SettingPage/SettingPage";
+import StudentsPage from "./Pages/StudentsPage/StudentsPage";
+import SubjectsPage from "./Pages/SubjectsPage/SubjectsPage";
+import SettingsPage from "./Pages/SettingsPage/SettingsPage";
 
 const AppRouter: FC = () => {
   return (
@@ -14,9 +14,9 @@ const AppRouter: FC = () => {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/grades" element={<GradesPage />} />
-        <Route path="/students" element={<StudentPage />} />
-        <Route path="/subjects" element={<SubjectPage />} />
-        <Route path="/settings" element={<SettingPage />} />
+        <Route path="/students" element={<StudentsPage />} />
+        <Route path="/subjects" element={<SubjectsPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
       </Routes>
     </div>
   );

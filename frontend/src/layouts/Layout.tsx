@@ -10,12 +10,15 @@ import {
   ListItemIcon,
   IconButton,
   Button,
+  Switch,
+  Tooltip,
 } from "@mui/material";
 import { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, MenuBook, People, School, Settings, Menu } from "@mui/icons-material";
+import { Home, MenuBook, People, School, Settings, Menu, Brightness7, Brightness4 } from "@mui/icons-material";
 import { useAppStore } from "../store/useAppStore";
 import { useUserStore } from "../store/useUserStore";
+import { useSettingsStore } from "../store/useSettingsStore";
 
 interface LayoutProps {
   children: ReactNode;
@@ -28,6 +31,7 @@ const Layout = ({ children }: LayoutProps) => {
   const location = useLocation();
   const { sidebarOpen, toggleSideBar } = useAppStore();
   const { user, login, logout } = useUserStore();
+  const { themeMode, toggleThemeMode } = useSettingsStore();
 
   const drawerStyles = {
     width: sidebarOpen ? drawerWidth : collapsedWidth,
@@ -103,6 +107,23 @@ const Layout = ({ children }: LayoutProps) => {
             </ListItem>
           ))}
         </List>
+        <Box
+          sx={{
+            mt: "auto",
+            px: 2,
+            pb: 2,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Tooltip title="Cambiar tema">
+            <IconButton edge="start" size="small">
+              {themeMode === "dark" ? <Brightness7 /> : <Brightness4 />}
+            </IconButton>
+          </Tooltip>
+          <Switch checked={themeMode === "dark"} onChange={toggleThemeMode} size="small" />
+        </Box>
       </Drawer>
 
       {/* Contenido Principal */}
