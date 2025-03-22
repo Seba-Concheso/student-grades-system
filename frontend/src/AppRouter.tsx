@@ -1,27 +1,23 @@
-import { AppBar, Button, Toolbar, Typography } from "@mui/material";
-import { FC,  } from "react";
-import { Link } from "react-router-dom";
-
+import { FC } from "react";
+import { Route, Routes } from "react-router-dom";
+import Home from "./Pages/Home/Home";
+import About from "./Pages/About/About";
+import GradesPage from "./Pages/GradesPage/GradesPage";
+import StudentPage from "./Pages/StudentPage/StudentPage";
+import SubjectPage from "./Pages/SubjectPage/SubjectPage";
+import SettingPage from "./Pages/SettingPage/SettingPage";
 
 const AppRouter: FC = () => {
- 
   return (
     <div>
-      
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            My App
-          </Typography>
-          <Button color="inherit" component={Link} to="/about">
-            About
-          </Button>
-          <Button color="inherit" component={Link} to="/home">
-            Home
-          </Button>
-        </Toolbar>
-      </AppBar>
-    
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/grades" element={<GradesPage />} />
+        <Route path="/students" element={<StudentPage />} />
+        <Route path="/subjects" element={<SubjectPage />} />
+        <Route path="/settings" element={<SettingPage />} />
+      </Routes>
     </div>
   );
 };
