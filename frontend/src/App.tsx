@@ -1,16 +1,18 @@
-
-import './App.css'
-import AppRouter from './AppRouter'
-import Layout from './layouts/Layout'
+import AppRouter from "./AppRouter";
+import Layout from "./layouts/Layout";
+import { useLocation } from "react-router-dom";
 
 function App() {
-  
+  const location = useLocation();
+  const isLoginRoute = location.pathname === "/login";
 
-  return (
+  return isLoginRoute ? (
+    <AppRouter />
+  ) : (
     <Layout>
-    <AppRouter/>
+      <AppRouter />
     </Layout>
-  )
+  );
 }
 
-export default App
+export default App;
