@@ -17,7 +17,7 @@ import { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Home, MenuBook, People, School, Settings, Menu, Brightness7, Brightness4 } from "@mui/icons-material";
 import { useAppStore } from "../store/useAppStore";
-import { useUserStore } from "../store/useUserStore";
+import { userStore } from "../store/userStore";
 import { useSettingsStore } from "../store/useSettingsStore";
 
 interface LayoutProps {
@@ -30,7 +30,7 @@ const collapsedWidth = 72;
 const Layout = ({ children }: LayoutProps) => {
   const location = useLocation();
   const { sidebarOpen, toggleSideBar } = useAppStore();
-  const { user, login, logout } = useUserStore();
+  const { user, logout } = userStore();
   const { themeMode, toggleThemeMode } = useSettingsStore();
 
   const drawerStyles = {
@@ -67,13 +67,13 @@ const Layout = ({ children }: LayoutProps) => {
           </Box>
           {user ? (
             <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-              <Typography variant="body1">Hola, {user.name}</Typography>
+              <Typography variant="body1">Hola, {user.username}</Typography>
               <Button color="inherit" onClick={logout}>
                 Cerrar sesión
               </Button>
             </Box>
           ) : (
-            <Button color="inherit" onClick={() => login({ name: "Juan", email: "juan@example.com" })}>
+            <Button color="inherit" component={Link} to="/login">
               Iniciar sesión
             </Button>
           )}

@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import User from "../models/user.model";
-import { json } from "sequelize";
 import { userToDTO } from "../dto/user.dto";
+import { generateToken } from "../utils/jwt";
 
 export const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
@@ -24,9 +24,15 @@ export const loginUser = async (req: Request, res: Response) => {
       return res.status(401).json({ error: "Contraseña incorrecta" });
     }
 
-    // Si todo está bien, devolvemos los datos del usuario sin la contraseña
+    // Si todo está bien, vamos a generar el token
     const { id, username, role } = user;
-    return res.status(200).json({ id, username, email, role });
+
+    const token = generateToken(id, role);
+    //Ahora retornamos el token con los datos del usuario
+    return res.status(200).json({
+      token,
+      user: { id, username, email, role },
+    });
   } catch (error) {
     console.error("Error al hacer login:", error);
     return res.status(500).json({ error: "Error interno del servidor" });

@@ -1,13 +1,19 @@
-import React, { JSX } from "react";
+import React, { JSX, useState } from "react";
 import { Avatar, Box, Card, CardContent, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { MenuBook, School, StarRateRounded } from "@mui/icons-material";
 import { PaletteColor } from "@mui/material/styles";
 import { useTheme } from "@mui/material/styles";
+import Input from "../../components/Input/Input";
+import CustomButton from "../../components/Button/CustomButton";
 
 type AllowedColor = "info" | "success" | "warning";
 
 const Home: React.FC = () => {
+  const [email, setEmail] = useState("");
+  const [desc, setDesc] = useState("");
+  const [accepted, setAccepted] = useState(false);
+  const [country, setCountry] = useState("");
   const theme = useTheme();
 
   const stats: {
@@ -87,6 +93,49 @@ const Home: React.FC = () => {
           </Grid>
         ))}
       </Grid>
+      <Box sx={{ width: { xs: "100%", md: "50%" }, mx: "auto" }}>
+        <form>
+          <Input id="email">
+            <Input.Label sx={{ color: "primary.main" }}>Descripción</Input.Label>
+            <Input.Field
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              sx={{ bgcolor: "white", borderRadius: 2 }}
+            ></Input.Field>
+            <Input.HelperText>Ingresa email válido</Input.HelperText>
+          </Input>
+          <Input id="desc">
+            <Input.Label>Descripción</Input.Label>
+            <Input.TextArea
+              rows={4}
+              value={desc}
+              onChange={(e) => setDesc(e.target.value)}
+              sx={{ bgcolor: "grey.100" }}
+            />
+          </Input>
+
+          <Input id="accept">
+            <Input.Checkbox checked={accepted} onChange={(e) => setAccepted(e.target.checked)} />
+            <Input.Label sx={{ ml: 1 }}>Acepto términos</Input.Label>
+          </Input>
+
+          <Input id="country">
+            <Input.Label>País</Input.Label>
+            <Input.Select
+              options={[
+                { label: "Argentina", value: "ar" },
+                { label: "Brasil", value: "br" },
+              ]}
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              sx={{ bgcolor: "background.paper" }}
+            />
+          </Input>
+        </form>
+
+        <CustomButton actionType="aceptar">guardar</CustomButton>
+      </Box>
     </Box>
   );
 };

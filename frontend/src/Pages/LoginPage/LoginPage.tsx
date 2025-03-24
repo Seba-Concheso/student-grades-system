@@ -1,38 +1,28 @@
 import { Box, Paper, Typography, TextField, Button, Stack, Alert } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../../store/useAuthStore";
+import { login } from "../../services/authService";
+import { userStore } from "../../store/userStore";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { login } = useAuthStore();
+  const loginUser = userStore((state) => state.login);
 
-  const handleLogin = async () => {
+  const handleLogin = async (event: React.FormEvent) => {
     if (!email || !password) {
       setError("Por favor completá todos los campos.");
       return;
     }
-
-    // Simulación de login – acá iría el fetch al backend
+    event.preventDefault();
     try {
-      // TODO: conectar con tu backend real
-      if (email === "admin@example.com" && password === "123456") {
-        // login exitoso
-        login({
-          id: 1,
-          name: "Admin",
-          email,
-          role: "admin",
-        });
-        navigate("/"); // redirigir al dashboard
-      } else {
-        setError("Credenciales inválidas.");
-      }
-    } catch (err) {
-      console.error(err);
+      const data = await login(email, password);
+      loginUser(data.token, data.user);
+      navigate("/");
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
       setError("Ocurrió un error al iniciar sesión.");
     }
   };

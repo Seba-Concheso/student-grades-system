@@ -2,16 +2,6 @@ import { DataTypes, Model, InferAttributes, InferCreationAttributes, CreationOpt
 import sequelize from "../config/database";
 import { IUser, roleType } from "../interfaces/user.interface";
 
-// class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
-//   declare id: CreationOptional<string>;
-//   declare username: string;
-//   declare email: string;
-//   declare password: string;
-//   declare role: "admin" | "profesor" | "estudiante";
-//   declare createdAt: CreationOptional<Date>;
-//   declare updatedAt: CreationOptional<Date>;
-// }
-
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> implements IUser {
   declare id: CreationOptional<string>;
   declare username: string;
