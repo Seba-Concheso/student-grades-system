@@ -15,6 +15,7 @@ import {
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import { useTheme } from "@mui/material/styles";
+import EnhancedTable from "../../components/Table/CustomTable";
 
 const grades = [
   {
@@ -131,6 +132,9 @@ const GradesPage = () => {
           </TableBody>
         </Table>
       </Paper>
+      <Box>
+        <EnhancedTable />
+      </Box>
     </Box>
   );
 };

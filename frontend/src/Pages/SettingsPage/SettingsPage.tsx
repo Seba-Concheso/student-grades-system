@@ -1,95 +1,133 @@
-import {
-  Box,
-  Typography,
-  Paper,
-  FormControlLabel,
-  Switch,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
-  TextField,
-  Stack,
-  Button,
-  Snackbar,
-  Alert,
-} from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import { useState } from "react";
-import { useSettingsStore } from "../../store/useSettingsStore";
+import { Avatar, Box, Card, CardContent, PaletteColor, Stack, Typography, useTheme } from "@mui/material";
+import Grid from "@mui/material/Grid2";
+import { JSX, useState } from "react";
+import PersonIcon from "@mui/icons-material/Person";
+import { School } from "@mui/icons-material";
+import Input from "../../components/Input/Input";
+import CustomButton from "../../components/Button/CustomButton";
+type AllowedColor = "info" | "success" | "warning";
 
 const SettingsPage = () => {
+  const [email, setEmail] = useState("");
+  const [desc, setDesc] = useState("");
+  const [accepted, setAccepted] = useState(false);
+  const [country, setCountry] = useState("");
   const theme = useTheme();
-  const { username, language, notificationsEnabled, setUsername, setLanguage, setNotificationsEnabled } =
-    useSettingsStore();
 
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-
-  const handleSave = () => {
-    setSnackbarOpen(true);
-  };
-
-  const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === "clickaway") return;
-    setSnackbarOpen(false);
-  };
+  const stats: {
+    label: string;
+    value: number;
+    icon: JSX.Element;
+    color: AllowedColor;
+  }[] = [
+    {
+      label: "Estudiantes",
+      value: 120,
+      icon: <School />,
+      color: "info",
+    },
+    {
+      label: "Profesores",
+      value: 15,
+      icon: <PersonIcon />,
+      color: "success",
+    },
+  ];
 
   return (
     <Box sx={{ bgcolor: theme.palette.background.default, p: 2 }}>
       <Typography variant="h4" gutterBottom fontWeight="bold" color="primary">
-        Configuración
+        Configuraciones
       </Typography>
 
-      <Paper
-        elevation={3}
-        sx={{
-          borderRadius: theme.shape.borderRadius,
-          p: 3,
-          maxWidth: 600,
-        }}
-      >
-        <Stack spacing={3}>
-          <TextField
-            label="Nombre de usuario"
-            variant="outlined"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            fullWidth
-          />
+      <Grid container spacing={3}>
+        {stats.map((stat) => (
+          <Grid key={stat.label} size={{ xs: 12, sm: 6, md: 4 }}>
+            <Card
+              elevation={3}
+              sx={{
+                p: 2,
+                minHeight: 120,
+                height: "100%",
+                borderRadius: 3,
+                display: "flex",
+                alignItems: "center",
+                transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                boxShadow: (theme) => `0px 4px 12px ${theme.palette.grey[200]}`,
+                "&:hover": {
+                  transform: "scale(1.03)",
+                  boxShadow: (theme) => `0px 6px 16px ${theme.palette.grey[300]}`,
+                },
+              }}
+            >
+              <Avatar
+                sx={{
+                  bgcolor: `${(theme.palette[stat.color] as PaletteColor).main}22`,
+                  color: (theme.palette[stat.color] as PaletteColor).main,
+                  width: 64,
+                  height: 64,
+                  mr: 2,
+                }}
+              >
+                {stat.icon}
+              </Avatar>
+              <CardContent sx={{ p: 0 }}>
+                <Stack spacing={0.5}>
+                  <Typography variant="subtitle1" color="text.secondary">
+                    {stat.label}
+                  </Typography>
+                  <Typography variant="h4" fontWeight="bold">
+                    {stat.value}
+                  </Typography>
+                </Stack>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+      <Box sx={{ width: { xs: "100%", md: "50%" }, mx: "auto" }}>
+        <form>
+          <Input id="email">
+            <Input.Label sx={{ color: "primary.main" }}>Descripción</Input.Label>
+            <Input.Field
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              sx={{ bgcolor: "white", borderRadius: 2 }}
+            ></Input.Field>
+            <Input.HelperText>Ingresa email válido</Input.HelperText>
+          </Input>
+          <Input id="desc">
+            <Input.Label>Descripción</Input.Label>
+            <Input.TextArea
+              rows={4}
+              value={desc}
+              onChange={(e) => setDesc(e.target.value)}
+              sx={{ bgcolor: "grey.100" }}
+            />
+          </Input>
 
-          <FormControl fullWidth>
-            <InputLabel id="lang-label">Idioma</InputLabel>
-            <Select labelId="lang-label" label="Idioma" value={language} onChange={(e) => setLanguage(e.target.value)}>
-              <MenuItem value="es">Español</MenuItem>
-              <MenuItem value="en">Inglés</MenuItem>
-            </Select>
-          </FormControl>
+          <Input id="accept">
+            <Input.Checkbox checked={accepted} onChange={(e) => setAccepted(e.target.checked)} />
+            <Input.Label sx={{ ml: 1 }}>Acepto términos</Input.Label>
+          </Input>
 
-          <FormControlLabel
-            control={
-              <Switch checked={notificationsEnabled} onChange={(e) => setNotificationsEnabled(e.target.checked)} />
-            }
-            label="Notificaciones activadas"
-          />
+          <Input id="country">
+            <Input.Label>País</Input.Label>
+            <Input.Select
+              options={[
+                { label: "Argentina", value: "ar" },
+                { label: "Brasil", value: "br" },
+              ]}
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              sx={{ bgcolor: "background.paper" }}
+            />
+          </Input>
+        </form>
 
-          <Box display="flex" justifyContent="flex-end">
-            <Button variant="contained" color="primary" onClick={handleSave}>
-              Guardar cambios
-            </Button>
-          </Box>
-        </Stack>
-      </Paper>
-
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert onClose={handleCloseSnackbar} severity="success" variant="filled">
-          Cambios guardados correctamente
-        </Alert>
-      </Snackbar>
+        <CustomButton actionType="aceptar">guardar</CustomButton>
+      </Box>
     </Box>
   );
 };
