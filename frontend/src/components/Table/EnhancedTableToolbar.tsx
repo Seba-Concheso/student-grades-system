@@ -1,11 +1,13 @@
 import { FC } from "react";
 import { EnhancedTableToolbarProps } from "./interface/interface";
-import { IconButton, Toolbar, Tooltip, Typography } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import { alpha } from "@mui/material/styles";
+import { Button, IconButton, Toolbar, Tooltip, Typography } from "@mui/material";
+import { alpha, useTheme } from "@mui/material/styles";
+import { getActionConfig } from "../../utils/getIconButtonStyle";
 
-const EnhancedTableToolbar: FC<EnhancedTableToolbarProps> = ({ numSelected }) => {
+const EnhancedTableToolbar: FC<EnhancedTableToolbarProps> = ({ numSelected, tableName, onAdd }) => {
+  const theme = useTheme();
+  const deleteSx = getActionConfig(theme, "delete");
+  const addSx = getActionConfig(theme, "add");
   return (
     <Toolbar
       sx={[
@@ -24,21 +26,21 @@ const EnhancedTableToolbar: FC<EnhancedTableToolbarProps> = ({ numSelected }) =>
         </Typography>
       ) : (
         <Typography sx={{ flex: "1 1 100%" }} variant="h6" id="tableTitle" component="div">
-          Nutrition
+          {tableName}
         </Typography>
       )}
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
+        <Tooltip title={deleteSx.tooltip}>
+          <IconButton sx={deleteSx.sx}>{deleteSx.icon}</IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
+        onAdd && (
+          <Tooltip title={addSx.tooltip}>
+            <Button variant="contained" color="secondary" onClick={onAdd}>
+              {addSx.icon}
+            </Button>
+          </Tooltip>
+        )
       )}
     </Toolbar>
   );

@@ -1,18 +1,40 @@
-import { Avatar, Box, Card, CardContent, PaletteColor, Stack, Typography, useTheme } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Card,
+  CardContent,
+  CircularProgress,
+  Container,
+  PaletteColor,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { JSX, useState } from "react";
+import { JSX } from "react";
 import PersonIcon from "@mui/icons-material/Person";
 import { School } from "@mui/icons-material";
-import Input from "../../components/Input/Input";
-import CustomButton from "../../components/Button/CustomButton";
+
+import EnhancedTable from "../../components/Table/CustomTable";
+import { useUsers } from "../../hooks/useUsers";
+import { settingsColumns } from "./constants/settingColumns";
 type AllowedColor = "info" | "success" | "warning";
 
 const SettingsPage = () => {
-  const [email, setEmail] = useState("");
-  const [desc, setDesc] = useState("");
-  const [accepted, setAccepted] = useState(false);
-  const [country, setCountry] = useState("");
   const theme = useTheme();
+  const { data: users = [], isLoading, isError } = useUsers();
+
+  if (isLoading) {
+    return (
+      <Box display="flex" justifyContent="center" mt={4}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (isError) {
+    return <p>Error al cargar usuarios.</p>;
+  }
 
   const stats: {
     label: string;
@@ -33,6 +55,8 @@ const SettingsPage = () => {
       color: "success",
     },
   ];
+
+  const handleAddGrade = () => {};
 
   return (
     <Box sx={{ bgcolor: theme.palette.background.default, p: 2 }}>
@@ -85,49 +109,15 @@ const SettingsPage = () => {
           </Grid>
         ))}
       </Grid>
-      <Box sx={{ width: { xs: "100%", md: "50%" }, mx: "auto" }}>
-        <form>
-          <Input id="email">
-            <Input.Label sx={{ color: "primary.main" }}>Descripción</Input.Label>
-            <Input.Field
-              type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              sx={{ bgcolor: "white", borderRadius: 2 }}
-            ></Input.Field>
-            <Input.HelperText>Ingresa email válido</Input.HelperText>
-          </Input>
-          <Input id="desc">
-            <Input.Label>Descripción</Input.Label>
-            <Input.TextArea
-              rows={4}
-              value={desc}
-              onChange={(e) => setDesc(e.target.value)}
-              sx={{ bgcolor: "grey.100" }}
-            />
-          </Input>
-
-          <Input id="accept">
-            <Input.Checkbox checked={accepted} onChange={(e) => setAccepted(e.target.checked)} />
-            <Input.Label sx={{ ml: 1 }}>Acepto términos</Input.Label>
-          </Input>
-
-          <Input id="country">
-            <Input.Label>País</Input.Label>
-            <Input.Select
-              options={[
-                { label: "Argentina", value: "ar" },
-                { label: "Brasil", value: "br" },
-              ]}
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
-              sx={{ bgcolor: "background.paper" }}
-            />
-          </Input>
-        </form>
-
-        <CustomButton actionType="aceptar">guardar</CustomButton>
-      </Box>
+      <Container maxWidth="lg" sx={{ mt: 4 }}>
+        <EnhancedTable
+          rows={users}
+          columns={settingsColumns(theme)}
+          defaultOrderBy={"id"}
+          tableName={"Usuarios"}
+          onAdd={handleAddGrade}
+        />
+      </Container>
     </Box>
   );
 };
